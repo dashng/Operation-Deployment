@@ -1,7 +1,7 @@
-set user 
+set user password _ mysql
 -------------
 
-The version of Nginx from Debian stable is rather old. We'll install from backports.
+Commands:
 
 ::
 
