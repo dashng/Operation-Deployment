@@ -1,3 +1,13 @@
+Install nginx
+-------------
+
+The version of Nginx from Debian stable is rather old. We'll install from backports.
+
+::
+
+	sudo pico /etc/apt/sources.list     # edit the sources list
+
+
 set user password -- mysql
 ==============================
 Command:
