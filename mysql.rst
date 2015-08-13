@@ -9,9 +9,5 @@ The version of Nginx from Debian stable is rather old. We'll install from backpo
 	flush privileges;
 
 
-set user password -- mysql
-==============================
-Command:
-
 
 
