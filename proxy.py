@@ -23,5 +23,6 @@ class Proxy(object):
 
 a = Proxy(t)
 
-a.run()
-a.walk()
+if __name__ == "__main__":
+    a.run()
+    a.walk()
