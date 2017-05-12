@@ -8,9 +8,6 @@ class Test():
 	def walk(self):
 		print 'walk...'
 
-t = Test()
-
-
 
 class Proxy(object):
     def __new__(cls, t):
@@ -21,8 +18,9 @@ class Proxy(object):
     def __init__(self, t):
         print "INIT"
 
-a = Proxy(t)
 
 if __name__ == "__main__":
-    a.run()
-    a.walk()
+	test = Test()
+	proxy = Proxy(test)
+	proxy.run()
+	proxy.walk()
