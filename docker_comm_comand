@@ -3,3 +3,7 @@
 docker rm $(docker ps -a -q)
 # Delete all images
 docker rmi $(docker images -q)
+# Edit docker image
+docker run --name web-container -it centos:latest bash
+
+
