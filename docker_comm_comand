@@ -5,5 +5,8 @@ docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
 # Edit docker image
 docker run --name web-container -it centos:latest bash
-
+# Commit image
+docker commit -m "Added LAMP Server" -a "NAME" test-lamp-server USER/test-lamp-server:latest
+# push to remote docker hub
+docker push USER/test-lamp-server
 
