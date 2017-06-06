@@ -9,4 +9,6 @@ docker run --name web-container -it centos:latest bash
 docker commit -m "Added LAMP Server" -a "NAME" test-lamp-server USER/test-lamp-server:latest
 # push to remote docker hub
 docker push USER/test-lamp-server
+# Docker edit & copy to another image
+http://www.techrepublic.com/article/how-to-commit-changes-to-a-docker-image/
 
