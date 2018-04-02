@@ -1,0 +1,53 @@
+1  ls
+    2  yum -y install python-pip
+    3  yum -y install epel-release && yum clean all
+    4  yum -y install python-pip && yum clean all
+    5  pip
+    6  pip install --upgrade pip
+    7  yum install git
+    8  yum install python-devel
+    9  yum install libxml2-dev
+   10  yum install libtool
+   11  yum install cairo
+   12  yum install py2cairo
+   13  yum install py2cairo
+   14  pip install cairocffi
+   15  yum install gcc
+   16  yum install libevent-devel
+   17  yum install gcc
+   18  pip install cairocffi
+   19  yum install libmpc-devel mpfr-devel gmp-devel zlib-devel*
+   20  yum install gcc
+   21  pip install cairocffi
+   22  pip install cairocffi
+   23  pip install libxml2-dev
+   24  yum install libxml2-dev
+   25  yum install libxml2-devel
+   26  pip install python-igraph
+   27  yum install gcc*
+   28  pip install cairocffi
+   29  pip install python-igraph
+   30  yum install python-devel
+   31  pip install python2-devel
+   32  yum install python2-devel
+   33  yum install libxml2-dev
+   34   pip install libxml2-dev
+   35  yum install python-devel
+   36  yum install libtool
+   37  yum install cairo
+   38   yum install py2cairo
+   39   yum install py2cairo
+   40  yum install igraph
+   41  pip install python-igraph
+   42  pip install cairocffi
+   43  pip install --upgrade setuptools
+   44  pip install cairocffi
+   45  pip install python-igraph
+   46  yum install igraph
+   47  yum install make
+   48  pip install libxml2-dev
+   49  yum install libxml2-dev
+   50   yum install libxml2-devel
+   51  pip install python-igraph
+   52     63  python
+   53  history
