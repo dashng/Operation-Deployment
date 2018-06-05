@@ -11,6 +11,14 @@ docker commit -m "Added LAMP Server" -a "NAME" test-lamp-server USER/test-lamp-s
 docker push USER/test-lamp-server
 # Docker edit & copy to another image
 http://www.techrepublic.com/article/how-to-commit-changes-to-a-docker-image/
+# build image
 docker build -t igraph/ubuntu:v1 . 
+# run image
 docker run  --name='python-igraph'  -tid  igraph/ubuntu:v1 
+# log into container
 docker exec -it python-igraph /bin/bash
+# load saved image
+docker load --input fedora.tar
+# export saved image
+docker save -o apache.dev.tar apache:dev
+
