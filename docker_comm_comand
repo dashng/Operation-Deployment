@@ -11,4 +11,6 @@ docker commit -m "Added LAMP Server" -a "NAME" test-lamp-server USER/test-lamp-s
 docker push USER/test-lamp-server
 # Docker edit & copy to another image
 http://www.techrepublic.com/article/how-to-commit-changes-to-a-docker-image/
-
+docker build -t igraph/ubuntu:v1 . 
+docker run  --name='python-igraph'  -tid  igraph/ubuntu:v1 
+docker exec -it python-igraph /bin/bash
