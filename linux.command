@@ -4,3 +4,5 @@ curl \
   http://localhost:8989/v1/devices_import/
   
   ps aux | grep python | awk '{print $2}' | xargs kill -9
+find . -path "*/migrations/*.pyc"  -delete
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
