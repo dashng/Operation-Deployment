@@ -21,4 +21,9 @@ docker exec -it python-igraph /bin/bash
 docker load --input fedora.tar
 # export saved image
 docker save -o apache.dev.tar apache:dev
+# cp file from host to docker
+docker cp foo.txt mycontainer:/foo.txt
+docker cp mycontainer:/foo.txt foo.txt
 
+docker cp src/. mycontainer:/target
+docker cp mycontainer:/src/. target
