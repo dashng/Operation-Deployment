@@ -12,3 +12,10 @@ postgresql.conf
 
 pg_hba.conf
 ```
+- Common Command
+
+```
+# get postgres uptime
+SELECT date_trunc('second', 
+ current_timestamp - pg_postmaster_start_time()) as uptime; 
+```
