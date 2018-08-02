@@ -27,5 +27,13 @@ psql -l
 # select database
 
 /c database_name
+
+# cal current database size
+
+SELECT pg_database_size(current_database());
+
+# cal all database size
+
+SELECT sum(pg_database_size(datname)) from pg_database;
 ```
 
