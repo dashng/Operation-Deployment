@@ -19,3 +19,13 @@ pg_hba.conf
 SELECT date_trunc('second', 
  current_timestamp - pg_postmaster_start_time()) as uptime; 
 ```
+```
+# show all databases
+psql -l
+/l
+
+# select database
+
+/c database_name
+```
+
