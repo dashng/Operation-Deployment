@@ -37,3 +37,9 @@ SELECT pg_database_size(current_database());
 SELECT sum(pg_database_size(datname)) from pg_database;
 ```
 
+# grant table all previleges on user
+
+```
+grant all privileges on database matrix_bgp_test to matrix_bgp;
+```
+
