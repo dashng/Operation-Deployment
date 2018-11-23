@@ -43,3 +43,7 @@ SELECT sum(pg_database_size(datname)) from pg_database;
 grant all privileges on database matrix_bgp_test to matrix_bgp;
 ```
 
+# issue: django.db.utils.ProgrammingError: must be owner of table lsp_config
+```
+grant postgres to matrix_bgp;
+```
