@@ -47,3 +47,13 @@ grant all privileges on database matrix_bgp_test to matrix_bgp;
 ```
 grant postgres to matrix_bgp;
 ```
+
+# create database
+
+create database xxx;
+
+# database backup
+
+pg_dump -U user -d database -f dump.sql
+
+psql -U user -d database -f dump.sql
