@@ -50,10 +50,28 @@ grant postgres to matrix_bgp;
 
 # create database
 
+```
 create database xxx;
+```
 
 # database backup
 
+```
 pg_dump -U user -d database -f dump.sql
 
 psql -U user -d database -f dump.sql
+```
+
+# add user from terminal 
+
+```
+su - postgres
+
+createuser --interactive --pwprompt
+```
+
+# alter user password 
+
+```
+ALTER USER postgres PASSWORD '*****';
+```
