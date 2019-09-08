@@ -75,3 +75,27 @@ createuser --interactive --pwprompt
 ```
 ALTER USER postgres PASSWORD '*****';
 ```
+
+# Pacemaker + Corosync maintenance commands
+
+1. clean up postgres data folder
+```
+rm -rf /var/lib/pgsql/10/data/*
+```
+2. grant data folder permission to 'postgres' user
+```
+chmod -R 0700 postgres /var/lib/pgsql/10/data/
+chown -R postgres:postgres /var/lib/pgsql/10/data/
+```
+3. backup the database from master node
+```
+/usr/pgsql-10/bin/pg_basebackup -h {{ master_ip }} -U postgres -D /var/lib/pgsql/10/data/ -X stream -P
+```
+4. clean up HA nodes
+```
+pcs resource cleanup pgsql-cluster
+```
+5. show Status
+```
+crm_mon -Afr -1
+```
