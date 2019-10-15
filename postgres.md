@@ -99,3 +99,11 @@ pcs resource cleanup pgsql-cluster
 ```
 crm_mon -Afr -1
 ```
+
+6. open firewal
+
+```
+systemctl start firewalld
+firewall-cmd --permanent --add-service=postgresql
+firewall-cmd --permanent --zone=public --add-port=6432/tcp
+```
