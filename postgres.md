@@ -113,6 +113,12 @@ firewall-cmd --permanent --zone=public --add-port=6432/tcp
 
 > 
 ```
+CREATE TABLESPACE fastspace LOCATION '/mnt/sda1/postgresql/data';
+
+```
+
+> 
+```
 db =# select spcname from pg_tablespace;  
   spcname   
 ------------
