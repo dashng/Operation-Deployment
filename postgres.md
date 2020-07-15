@@ -121,3 +121,35 @@ db =# select spcname from pg_tablespace;
  timeseries
 (3 rows)
 ```
+
+>
+```
+db=# select pg_size_pretty(pg_tablespace_size('timeseries')); 
+ pg_size_pretty 
+----------------
+ 11 GB
+(1 row)
+```
+
+>
+```
+db=# select spcname
+db-#       ,pg_tablespace_location(oid) 
+db-# from   pg_tablespace;
+  spcname   | pg_tablespace_location 
+------------+------------------------
+ pg_default | 
+ pg_global  | 
+ timeseries | /data/ts
+(3 rows)
+db=# select spcname
+db-#       ,pg_tablespace_location(oid) 
+db-# from   pg_tablespace;
+  spcname   | pg_tablespace_location 
+------------+------------------------
+ pg_default | 
+ pg_global  | 
+ timeseries | /data/ts
+(3 rows)
+
+```
