@@ -107,3 +107,17 @@ systemctl start firewalld
 firewall-cmd --permanent --add-service=postgresql
 firewall-cmd --permanent --zone=public --add-port=6432/tcp
 ```
+
+
+# Postgresql Table Space
+
+> 
+```
+db =# select spcname from pg_tablespace;  
+  spcname   
+------------
+ pg_default
+ pg_global
+ timeseries
+(3 rows)
+```
