@@ -27,3 +27,5 @@ docker cp mycontainer:/foo.txt foo.txt
 
 docker cp src/. mycontainer:/target
 docker cp mycontainer:/src/. target
+
+docker ps --format=$FORMAT # FORMAT added as env variable
