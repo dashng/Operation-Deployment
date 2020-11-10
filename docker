@@ -29,3 +29,5 @@ docker cp src/. mycontainer:/target
 docker cp mycontainer:/src/. target
 
 docker ps --format=$FORMAT # FORMAT added as env variable
+
+docker tag test:latest test:1
