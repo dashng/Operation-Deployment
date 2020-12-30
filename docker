@@ -31,3 +31,5 @@ docker cp mycontainer:/src/. target
 docker ps --format=$FORMAT # FORMAT added as env variable
 
 docker tag test:latest test:1
+
+docker run --rm  -v /etc/kong:/etc/kong -p 0.0.0.0:8000:8000 -p 0.0.0.0:8801:8001 --name kong-local kong kong start -c /etc/kong/kong.conf --vv
