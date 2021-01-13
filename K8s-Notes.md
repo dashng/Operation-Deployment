@@ -135,7 +135,43 @@ vrrp_instance VI_1 {
 docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
 ```
 
-#### Kubeadm 部署
+#### Deploy Kubernetes with Kubeadm
+
+- Set yum repo
+```
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+# clean yum cache & recache
+yum clean all
+yum makecache
+```
+- Stop firewalld & Disable selinux
+
+```
+systemctl stop firewalld
+systemctl disable firewalld
+
+setenforce 0
+vim /etc/selinux/config
+# set **SELINUX=disabled**
+```
+
+- Create K8s.conf
+
+```
+cat <<EOF >  /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sysctl --system
+```
+
+-- Enable IPv4 forward
+
+```
+vi /etc/sysctl.conf
+net.ipv4.ip_forward = 1
+sysctl -p
+```
 
 #### etcd 部署
 
