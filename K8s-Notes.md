@@ -79,6 +79,61 @@ EOF
 ```
 docker run -d --name=diamond-haproxy --net=host  -v /etc/haproxy:/usr/local/etc/haproxy/:ro haproxy
 ```
+#### Keepalived Deployment
+
+- Create configuration file
+
+```
+mkdir /etc/keepalived/
+touch keepalived.conf
+```
+```
+global_defs {
+   script_user root 
+   enable_script_security
+
+}
+
+vrrp_script chk_haproxy {
+    script "/bin/bash -c 'if [[ $(netstat -nlp | grep 9443) ]]; then exit 0; else exit 1; fi'"  \# haproxy check
+    interval 2  
+    weight 11 
+}
+
+vrrp_instance VI_1 {
+  interface eth0
+
+  state MASTER \# node role by default, this is master node
+  virtual_router_id 51\# same id means same virtual group
+  priority 100 \# weight
+  nopreempt # role can change to be master
+
+  unicast_peer {
+
+  }
+
+  virtual_ipaddress {
+    10.124.44.125  \# vip
+  }
+
+  authentication {
+    auth_type PASS
+    auth_pass password
+  }
+
+  track_script {
+      chk_haproxy
+  }
+
+  notify "/container/service/keepalived/assets/notify.sh"
+}
+```
+
+- run keepalived container
+
+```
+docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/container/service/keepalived/assets/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
+```
 
 #### Kubeadm 部署
 
