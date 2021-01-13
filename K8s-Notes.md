@@ -84,27 +84,27 @@ docker run -d --name=diamond-haproxy --net=host  -v /etc/haproxy:/usr/local/etc/
 - Create configuration file
 
 ```
-mkdir /etc/keepalived/
+mkdir /etc/keepalived/ && cd /etc/keepalived/
 touch keepalived.conf
 ```
 ```
 global_defs {
-   script_user root 
+   script_user root
    enable_script_security
 
 }
 
 vrrp_script chk_haproxy {
     script "/bin/bash -c 'if [[ $(netstat -nlp | grep 9443) ]]; then exit 0; else exit 1; fi'"  # haproxy check
-    interval 2  
-    weight 11 
+    interval 2
+    weight 11
 }
 
 vrrp_instance VI_1 {
-  interface eth0
+  interface ens32
 
   state MASTER # node role by default, this is master node
-  virtual_router_id 51# same id means same virtual group
+  virtual_router_id 51 # same id means same virtual group
   priority 100 # weight
   nopreempt # role can change to be master
 
@@ -125,14 +125,14 @@ vrrp_instance VI_1 {
       chk_haproxy
   }
 
-  notify "/container/service/keepalived/assets/notify.sh"
+  # notify "/container/service/keepalived/assets/notify.sh"
 }
 ```
 
 - run keepalived container
 
 ```
-docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/container/service/keepalived/assets/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
+docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
 ```
 
 #### Kubeadm 部署
