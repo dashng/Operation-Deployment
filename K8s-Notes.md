@@ -1,7 +1,8 @@
 Setup K8s Multiple Master Nodes Cluster ON Centos Server
 ---------
 #### K8s Nodes
-
+|Node Name | IP |
+|--- | --- |
 | Master Node   | 10.124.44.105 |
 | Worker Node   | 10.124.44.106 |
 | Worker Node   | 10.124.44.107 |
