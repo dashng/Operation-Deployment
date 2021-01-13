@@ -95,7 +95,7 @@ global_defs {
 }
 
 vrrp_script chk_haproxy {
-    script "/bin/bash -c 'if [[ $(netstat -nlp | grep 9443) ]]; then exit 0; else exit 1; fi'"  \# haproxy check
+    script "/bin/bash -c 'if [[ $(netstat -nlp | grep 9443) ]]; then exit 0; else exit 1; fi'"  # haproxy check
     interval 2  
     weight 11 
 }
@@ -103,9 +103,9 @@ vrrp_script chk_haproxy {
 vrrp_instance VI_1 {
   interface eth0
 
-  state MASTER \# node role by default, this is master node
-  virtual_router_id 51\# same id means same virtual group
-  priority 100 \# weight
+  state MASTER # node role by default, this is master node
+  virtual_router_id 51# same id means same virtual group
+  priority 100 # weight
   nopreempt # role can change to be master
 
   unicast_peer {
@@ -113,7 +113,7 @@ vrrp_instance VI_1 {
   }
 
   virtual_ipaddress {
-    10.124.44.125  \# vip
+    10.124.44.125  # vip
   }
 
   authentication {
