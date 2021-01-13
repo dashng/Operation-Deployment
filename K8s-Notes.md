@@ -3,41 +3,14 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 #### haproxy deployment
 - create docker mounted folder and haproxy config file
-<code>
+
 mkdir /etc/haproxy
 touch /etc/haproxy/haproxy.cfg
 cat >> /etc/haproxy/haproxy.cfg << EOF
-#---------------------------------------------------------------------
-# Example configuration for a possible web application.  See the
-# full configuration options online.
-#
-#   https://www.haproxy.org/download/2.1/doc/configuration.txt
-#   https://cbonte.github.io/haproxy-dconv/2.1/configuration.html
-#
-#---------------------------------------------------------------------
 
-#---------------------------------------------------------------------
-# Global settings
-#---------------------------------------------------------------------
 global
-    # to have these messages end up in /var/log/haproxy.log you will
-    # need to:
-    #
-    # 1) configure syslog to accept network log events.  This is done
-    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
-    #    /etc/sysconfig/syslog
-    #
-    # 2) configure local2 events to go to the /var/log/haproxy.log
-    #   file. A line like the following can be added to
-    #   /etc/sysconfig/syslog
-    #
-    #    local2.*                       /var/log/haproxy.log
-    #
     log         127.0.0.1 local2
-
     maxconn     4000
-
-
 #---------------------------------------------------------------------
 # common defaults that all the 'listen' and 'backend' sections will
 # use if not designated in their block
@@ -87,7 +60,7 @@ backend kubernetes-apiserver
          server master-10.124.44.106 10.124.44.106:6443 check
          server master-10.124.44.107 10.124.44.107:6443 check
 EOF
-</code>
+
 
 #### Kubeadm 部署
 
