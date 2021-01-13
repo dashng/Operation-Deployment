@@ -165,7 +165,7 @@ EOF
 sysctl --system
 ```
 
--- Enable IPv4 forward
+- Enable IPv4 forward
 
 ```
 vi /etc/sysctl.conf
