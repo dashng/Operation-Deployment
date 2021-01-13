@@ -1,7 +1,12 @@
 Setup K8s Multiple Master Nodes Cluster ON Centos Server
 ---------
+#### K8s Nodes
 
-#### haproxy deployment
+| Master Node   | 10.124.44.105 |
+| Worker Node   | 10.124.44.106 |
+| Worker Node   | 10.124.44.107 |
+
+#### Haproxy deployment
 - create haproxy configuration file
 ```
 mkdir /etc/haproxy
