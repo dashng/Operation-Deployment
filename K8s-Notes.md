@@ -5,9 +5,13 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 - create docker mounted folder and haproxy config file
 ```
 mkdir /etc/haproxy
+```
 
+```
 touch /etc/haproxy/haproxy.cfg
+```
 
+```
 cat >> /etc/haproxy/haproxy.cfg << EOF
 # haproxy.cfg settings
 global
