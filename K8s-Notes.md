@@ -2,7 +2,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 ---------
 
 #### haproxy deployment
-- create docker mounted folder and haproxy config file
+- create haproxy configuration file
 ```
 mkdir /etc/haproxy
 ```
@@ -66,6 +66,12 @@ backend kubernetes-apiserver
          server master-10.124.44.106 10.124.44.106:6443 check
          server master-10.124.44.107 10.124.44.107:6443 check
 EOF
+```
+
+- run docker image
+
+```
+docker run -d --name=diamond-haproxy --net=host  -v /etc/haproxy:/usr/local/etc/haproxy/:ro haproxy
 ```
 
 #### Kubeadm 部署
