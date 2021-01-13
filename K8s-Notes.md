@@ -7,21 +7,21 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 mkdir /etc/haproxy
 touch /etc/haproxy/haproxy.cfg
 cat >> /etc/haproxy/haproxy.cfg << EOF
-
+```
 global
     log         127.0.0.1 local2
     maxconn     4000
-#---------------------------------------------------------------------
-# common defaults that all the 'listen' and 'backend' sections will
-# use if not designated in their block
-#---------------------------------------------------------------------
+
+\# common defaults that all the 'listen' and 'backend' sections will
+\# use if not designated in their block
+
 defaults
     mode                    tcp
     log                     global
     option                  tcplog
     option                  dontlognull
     option http-server-close
-    # option forwardfor       except 127.0.0.0/8
+    \# option forwardfor       except 127.0.0.0/8
     option                  redispatch
     retries                 3
     timeout http-request    10s
@@ -33,9 +33,9 @@ defaults
     timeout check           10s
     maxconn                 3000
 
-#---------------------------------------------------------------------
-# main frontend which proxys to the backends
-#---------------------------------------------------------------------
+
+\# main frontend which proxys to the backends
+
 frontend  kubernetes-apiserver
     mode tcp
     bind *:9443
@@ -46,21 +46,21 @@ frontend  kubernetes-apiserver
 
     default_backend             kubernetes-apiserver
 
-#---------------------------------------------------------------------
-# round robin balancing between the various backends
-#---------------------------------------------------------------------
+
+\# round robin balancing between the various backends
+
 backend kubernetes-apiserver
     option httpchk GET /healthz
     http-check expect status 200
     mode tcp
     option ssl-hello-chk
     balance     roundrobin
-         # k8s-apiservers backend
+         \# k8s-apiservers backend
          server master-10.124.44.105 10.124.44.105:6443 check
          server master-10.124.44.106 10.124.44.106:6443 check
          server master-10.124.44.107 10.124.44.107:6443 check
 EOF
-
+```
 
 #### Kubeadm 部署
 
