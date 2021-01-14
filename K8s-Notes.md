@@ -152,7 +152,7 @@ systemctl disable firewalld
 
 setenforce 0
 vim /etc/selinux/config
-set **SELINUX=disabled**
+set SELINUX=disabled
 ```
 
 - Create K8s.conf
