@@ -248,7 +248,13 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     
     #3 command: the command is to add worker node to the cluster.
     
-    
+- How to resolve: k8s inner pod cannot visit clusterIP and service ip
+
+    https://www.cnblogs.com/52py/p/14141385.html
+
+- How to resolve: Can not access service by curl <ClusterIP>:<Port>
+   
+    https://github.com/kubernetes/kubernetes/issues/37199
 
 #### K8s Installation Video
 ```
