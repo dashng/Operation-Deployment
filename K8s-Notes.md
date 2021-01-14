@@ -265,5 +265,12 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 https://www.youtube.com/watch?v=ZxC6FwEc9WQ
 https://www.youtube.com/watch?v=zj6r_EEhv6s
 ```
+#### Other online installation guide
 
+https://www.youtube.com/watch?v=E3h8_MJmkVU
+https://github.com/tunetolinux/Kubernetes-Installation/wiki
+https://phoenixnap.com/kb/how-to-install-kubernetes-on-centos
+https://blog.csdn.net/weixin_40768973/article/details/109323941
+https://github.com/hub-kubernetes/kubeadm-multi-master-setup
+https://www.cnblogs.com/xiao987334176/p/11899321.html
 
