@@ -235,13 +235,13 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     ```
     * 2# command
     
-    **kubeadm init phase upload-certs --experimental-upload-certs** update the --certificate-key if expired.
+    The command execute on master node: '**kubeadm init phase upload-certs --experimental-upload-certs**' update the --certificate-key if expired.
     ```
     kubeadm join 10.124.44.125:6443 --token lfku8c.bbbewtcyh0j9v31z     --discovery-token-ca-cert-hash sha256:4273c55072f4ea08e3535ba33397c779f4576c81f198a4809655cf80c406d703     --control-plane --certificate-key 3c21216e68441116ca3a68ee93a8a31343746c8a56d5f11729fb1885ef9717f3
     ```
     * 3# command
     
-    **kubeadm token create --print-join-command** generate the join token command.
+    The command execute on master node: '**kubeadm token create --print-join-command**' generate the join token command.
     ```
     kubeadm join 10.124.44.125:6443 --token u7djab.gih4reqcnbeplo53     --discovery-token-ca-cert-hash sha256:4273c55072f4ea08e3535ba33397c779f4576c81f198a4809655cf80c406d703 
     ```
