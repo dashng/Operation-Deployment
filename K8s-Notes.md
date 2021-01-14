@@ -243,7 +243,9 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     ```
     
     #1 command: execute this command on the master node to enable kubectl api.
+    
     #2 command: the command is to add master node to the cluster.
+    
     #3 command: the command is to add worker node to the cluster.
     
     
