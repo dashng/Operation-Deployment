@@ -215,15 +215,17 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 - kubernetes cluster init
 
+    ```
+    kubeadm init --control-plane-endpoint "10.124.44.125:6443" --upload-certs --pod-network-cidr=10.244.0.0/16
+    ```
+
     kubeadm init --control-plane-endpoint "LOAD_BALANCER_DNS:LOAD_BALANCER_PORT" --upload-certs --pod-network-cidr=10.244.0.0/16
 
     Here, LOAD_BALANCER_DNS is the IP address or the dns name of the loadbalancer. I will use the dns name of the server, i.e. loadbalancer as the LOAD_BALANCER_DNS. In case your DNS name is not resolvable across your network, you can use the IP address for the same.
 
     The LOAD_BALANCER_PORT is the front end configuration port defined in HAPROXY configuration. For this demo, we have kept the port as 6443.
 
-    ```
-    kubeadm init --control-plane-endpoint "10.124.44.125:6443" --upload-certs --pod-network-cidr=10.244.0.0/16
-    ```
+    
     After execution the command, below 3 commands output:
     * 1# command
     ```
