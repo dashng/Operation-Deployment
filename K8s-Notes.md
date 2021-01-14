@@ -241,7 +241,12 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     ```
     kubeadm join 10.124.44.125:6443 --token u7djab.gih4reqcnbeplo53     --discovery-token-ca-cert-hash sha256:4273c55072f4ea08e3535ba33397c779f4576c81f198a4809655cf80c406d703 
     ```
-
+    
+    #1 command: execute this command on the master node to enable kubectl api.
+    #2 command: the command is to add master node to the cluster.
+    #3 command: the command is to add worker node to the cluster.
+    
+    
 
 #### etcd 部署
 
