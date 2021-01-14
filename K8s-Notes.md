@@ -182,7 +182,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     sysctl -p
     ```
 
-- Close Swap
+- Turn Off Swap
 
     ```
     swapoff -a
