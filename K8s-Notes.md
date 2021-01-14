@@ -7,6 +7,15 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 | Worker Node   | 10.124.44.106 |
 | Worker Node   | 10.124.44.107 |
 
+#### Configure Host Name
+
+Edit /etc/hosts, append below lines:
+```
+10.124.44.105   k8s-master
+10.124.44.106   k8s-node1
+10.124.44.107   k8s-node2
+```
+
 #### Haproxy deployment on all k8s nodes
 - create haproxy configuration file
 ```
@@ -172,6 +181,38 @@ vi /etc/sysctl.conf
 net.ipv4.ip_forward = 1
 sysctl -p
 ```
+
+- Close Swap
+
+```
+swapoff -a
+```
+comment out the line.
+```
+vi /etc/fstab
+#/dev/mapper/cl-swap     swap                    swap    defaults        0 0
+```
+- Add K8s yum Repo
+
+```
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+```
+
+- Install Kubernetes Components
+
+```
+yum -y install kubectl kubelet kubeadm
+systemctl enable kubelet && systemctl start  kubelet
+```
+
 
 #### etcd 部署
 
