@@ -250,13 +250,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     
     
 
-#### etcd 部署
-
-#### rancher 部署
-
-#### kubeoperator 部署
-
-### Persistent Volumes
+#### K8s Installation Video
 ```
 https://www.youtube.com/watch?v=ZxC6FwEc9WQ
 https://www.youtube.com/watch?v=zj6r_EEhv6s
