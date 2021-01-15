@@ -10,7 +10,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 #### Configure Host Name
 
     Edit /etc/hosts, append below lines:
-    ```
+    ```bash
     10.124.44.105   k8s-master
     10.124.44.106   k8s-node1
     10.124.44.107   k8s-node2
@@ -18,15 +18,15 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 #### Haproxy deployment on all k8s nodes
 - create haproxy configuration file
-    ```
+    ```bash
     mkdir /etc/haproxy
     ```
 
-    ```
+    ```bash
     touch /etc/haproxy/haproxy.cfg
     ```
 
-    ```
+    ```bash
     cat >> /etc/haproxy/haproxy.cfg << EOF
     # haproxy.cfg settings
     global
@@ -85,18 +85,18 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 - run docker image
 
-    ```
+    ```bash
     docker run -d --name=diamond-haproxy --net=host  -v /etc/haproxy:/usr/local/etc/haproxy/:ro haproxy
     ```
 #### Keepalived Deployment
 
 - Create configuration file
 
-    ```
+    ```bash
     mkdir /etc/keepalived/ && cd /etc/keepalived/
     touch keepalived.conf
     ```
-    ```
+    ```bash
     global_defs {
        script_user root
        enable_script_security
@@ -140,14 +140,15 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 - run keepalived container
 
-    ```
+    ```bash
     docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
     ```
 
 #### Deploy Kubernetes with Kubeadm
 
 - Set yum repo
-    ```
+
+    ```bash
     curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
     # clean yum cache & recache
     yum clean all
@@ -155,7 +156,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     ```
     - Stop firewalld & Disable selinux
 
-    ```
+    ```bash
     systemctl stop firewalld
     systemctl disable firewalld
 
@@ -166,7 +167,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 - Create K8s.conf
 
-    ```
+    ```bash
     cat <<EOF >  /etc/sysctl.d/k8s.conf
     net.bridge.bridge-nf-call-ip6tables = 1
     net.bridge.bridge-nf-call-iptables = 1
@@ -176,7 +177,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
     - Enable IPv4 forward
 
-    ```
+    ```bash
     vi /etc/sysctl.conf
     net.ipv4.ip_forward = 1
     sysctl -p
@@ -184,17 +185,17 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 - Turn Off Swap
 
-    ```
+    ```bash
     swapoff -a
     ```
     comment out the line.
-    ```
+    ```bash
     vi /etc/fstab
     #/dev/mapper/cl-swap     swap                    swap    defaults        0 0
     ```
 - Add K8s yum Repo
 
-    ```
+    ```bash
     cat <<EOF > /etc/yum.repos.d/kubernetes.repo
     [kubernetes]
     name=Kubernetes
@@ -208,27 +209,27 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 - Install Kubernetes Components
 
-    ```
+    ```bash
     yum -y install kubectl kubelet kubeadm
     systemctl enable kubelet && systemctl start  kubelet
     ```
 
 - kubernetes cluster init
 
-    ```
+    ```bash
     kubeadm init --control-plane-endpoint "10.124.44.125:6443" --upload-certs --pod-network-cidr=10.244.0.0/16
     ```
 
-    kubeadm init --control-plane-endpoint "LOAD_BALANCER_DNS:LOAD_BALANCER_PORT" --upload-certs --pod-network-cidr=10.244.0.0/16
+    + kubeadm init --control-plane-endpoint "LOAD_BALANCER_DNS:LOAD_BALANCER_PORT" --upload-certs --pod-network-cidr=10.244.0.0/16
 
-    Here, LOAD_BALANCER_DNS is the IP address or the dns name of the loadbalancer. I will use the dns name of the server, i.e. loadbalancer as the LOAD_BALANCER_DNS. In case your DNS name is not resolvable across your network, you can use the IP address for the same.
+    + Here, LOAD_BALANCER_DNS is the IP address or the dns name of the loadbalancer. I will use the dns name of the server, i.e. loadbalancer as the LOAD_BALANCER_DNS. In case your DNS name is not resolvable across your network, you can use the IP address for the same.
 
-    The LOAD_BALANCER_PORT is the front end configuration port defined in HAPROXY configuration. For this demo, we have kept the port as 6443.
+    + The LOAD_BALANCER_PORT is the front end configuration port defined in HAPROXY configuration. For this demo, we have kept the port as 6443.
 
     
-    After execution the command, below 3 commands output:
+    +After execution the command, below 3 commands output:
     * 1# command
-    ```
+    ```bash
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -236,13 +237,13 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
     * 2# command
     
     The command execute on master node: '**kubeadm init phase upload-certs --experimental-upload-certs**' update the --certificate-key if expired.
-    ```
+    ```bash
     kubeadm join 10.124.44.125:6443 --token lfku8c.bbbewtcyh0j9v31z     --discovery-token-ca-cert-hash sha256:4273c55072f4ea08e3535ba33397c779f4576c81f198a4809655cf80c406d703     --control-plane --certificate-key 3c21216e68441116ca3a68ee93a8a31343746c8a56d5f11729fb1885ef9717f3
     ```
     * 3# command
     
     The command execute on master node: '**kubeadm token create --print-join-command**' generate the join token command.
-    ```
+    ```bash
     kubeadm join 10.124.44.125:6443 --token u7djab.gih4reqcnbeplo53     --discovery-token-ca-cert-hash sha256:4273c55072f4ea08e3535ba33397c779f4576c81f198a4809655cf80c406d703 
     ```
     
