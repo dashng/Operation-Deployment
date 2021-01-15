@@ -483,4 +483,5 @@ https://phoenixnap.com/kb/how-to-install-kubernetes-on-centos
 https://blog.csdn.net/weixin_40768973/article/details/109323941
 https://github.com/hub-kubernetes/kubeadm-multi-master-setup
 https://www.cnblogs.com/xiao987334176/p/11899321.html
+https://www.qikqiak.com/post/update-k8s-10y-expire-certs/
 
