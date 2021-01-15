@@ -1,13 +1,13 @@
 Setup K8s Multiple Master Nodes Cluster ON Centos Server
 ---------
 
-#### K8s Cluster Nodes
+## K8s Cluster Nodes
 
 + master Node   10.124.44.105
 + master Node   10.124.44.106
 + master Node   10.124.44.107 
     
-#### Configure Host Name for all servers
+## Configure Host Name for all servers
 
 - Edit /etc/hosts, append below lines:
 ``` bash
@@ -16,7 +16,7 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 10.124.44.107   k8s-node2
 ```
 
-#### Haproxy deployment on all k8s nodes
+## Haproxy deployment on all k8s nodes
 - create haproxy configuration file
 ``` bash
 mkdir /etc/haproxy
@@ -88,7 +88,7 @@ EOF
 ```bash
 docker run -d --name=diamond-haproxy --net=host  -v /etc/haproxy:/usr/local/etc/haproxy/:ro haproxy
 ```
-#### Keepalived Deployment
+## Keepalived Deployment
 
 - Create configuration file
 
@@ -144,7 +144,7 @@ vrrp_instance VI_1 {
 docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
 ```
 
-#### Deploy Kubernetes with Kubeadm
+## Deploy Kubernetes with Kubeadm
 
 - Set yum repo
 
@@ -261,12 +261,12 @@ https://www.cnblogs.com/52py/p/14141385.html
    
 https://github.com/kubernetes/kubernetes/issues/37199
 
-#### K8s Installation Video
+## K8s Installation Video
 ```
 https://www.youtube.com/watch?v=ZxC6FwEc9WQ
 https://www.youtube.com/watch?v=zj6r_EEhv6s
 ```
-#### Other online installation guide
+## Other online installation guide
 
 https://www.youtube.com/watch?v=E3h8_MJmkVU
 https://github.com/tunetolinux/Kubernetes-Installation/wiki
