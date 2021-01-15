@@ -261,6 +261,215 @@ https://www.cnblogs.com/52py/p/14141385.html
    
 https://github.com/kubernetes/kubernetes/issues/37199
 
+## Manage certs
+
+- Check certs expiration date
+
+``` bash
+[root@k8s-master ~]# kubeadm alpha certs check-expiration
+Command "check-expiration" is deprecated, please use the same command under "kubeadm certs"
+[check-expiration] Reading configuration from the cluster...
+[check-expiration] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+
+CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+admin.conf                 Jan 15, 2022 00:51 UTC   364d                                    no      
+apiserver                  Jan 15, 2022 00:51 UTC   364d            ca                      no      
+apiserver-etcd-client      Jan 15, 2022 00:51 UTC   364d            etcd-ca                 no      
+apiserver-kubelet-client   Jan 15, 2022 00:51 UTC   364d            ca                      no      
+controller-manager.conf    Jan 15, 2022 00:51 UTC   364d                                    no      
+etcd-healthcheck-client    Jan 15, 2022 00:51 UTC   364d            etcd-ca                 no      
+etcd-peer                  Jan 15, 2022 00:51 UTC   364d            etcd-ca                 no      
+etcd-server                Jan 15, 2022 00:51 UTC   364d            etcd-ca                 no      
+front-proxy-client         Jan 15, 2022 00:51 UTC   364d            front-proxy-ca          no      
+scheduler.conf             Jan 15, 2022 00:51 UTC   364d                                    no      
+
+CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+ca                      Jan 12, 2031 07:26 UTC   9y              no      
+etcd-ca                 Jan 12, 2031 07:26 UTC   9y              no      
+front-proxy-ca          Jan 12, 2031 07:26 UTC   9y              no 
+```
+
+- renew certs if expired
+
++ execute the command **kubectl get cm -o yaml -n kube-system kubeadm-config**.
++ Get the **ClusterConfiguration** section from the output and save as **kubeadm.yaml**.
+``` bash
+[root@k8s-master ~]# kubectl get cm -o yaml -n kube-system kubeadm-config
+
+apiVersion: v1
+data:
+  ClusterConfiguration: |
+    apiServer:
+      extraArgs:
+        authorization-mode: Node,RBAC
+      timeoutForControlPlane: 4m0s
+    apiVersion: kubeadm.k8s.io/v1beta2
+    certificatesDir: /etc/kubernetes/pki
+    clusterName: kubernetes
+    controlPlaneEndpoint: 10.124.44.125:6443
+    controllerManager: {}
+    dns:
+      type: CoreDNS
+    etcd:
+      local:
+        dataDir: /var/lib/etcd
+    imageRepository: k8s.gcr.io
+    kind: ClusterConfiguration
+    kubernetesVersion: v1.20.2
+    networking:
+      dnsDomain: cluster.local
+      podSubnet: 10.244.0.0/16
+      serviceSubnet: 10.96.0.0/12
+    scheduler: {}
+  ClusterStatus: |
+    apiEndpoints:
+      k8s-master:
+        advertiseAddress: 10.124.44.105
+        bindPort: 6443
+      k8s-node1:
+        advertiseAddress: 10.124.44.106
+        bindPort: 6443
+      k8s-node2:
+        advertiseAddress: 10.124.44.107
+        bindPort: 6443
+    apiVersion: kubeadm.k8s.io/v1beta2
+    kind: ClusterStatus
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2021-01-14T07:27:47Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:ClusterConfiguration: {}
+        f:ClusterStatus: {}
+    manager: kubeadm
+    operation: Update
+    time: "2021-01-14T07:27:47Z"
+  name: kubeadm-config
+  namespace: kube-system
+  resourceVersion: "2411"
+  uid: 37764103-a41e-455e-b688-9c1e5df5ae1c
+```
+
+- backup the certs and configurations and etcd data
+
+``` bash
+$ mkdir /etc/kubernetes.bak
+$ cp -r /etc/kubernetes/pki/ /etc/kubernetes.bak
+$ cp /etc/kubernetes/*.conf /etc/kubernetes.bak
+```
+
+``` bash
+$ cp -r /var/lib/etcd /var/lib/etcd.bak
+```
+
+- run command to renew the certs
+
+```
+[root@k8s-master kubernetes]# kubeadm alpha certs renew all --config=kubeadm.yaml
+Command "all" is deprecated, please use the same command under "kubeadm certs"
+certificate embedded in the kubeconfig file for the admin to use and for kubeadm itself renewed
+certificate for serving the Kubernetes API renewed
+certificate the apiserver uses to access etcd renewed
+certificate for the API server to connect to kubelet renewed
+certificate embedded in the kubeconfig file for the controller manager to use renewed
+certificate for liveness probes to healthcheck etcd renewed
+certificate for etcd nodes to communicate with each other renewed
+certificate for serving etcd renewed
+certificate for the front proxy client renewed
+certificate embedded in the kubeconfig file for the scheduler manager to use renewed
+
+Done renewing certificates. You must restart the kube-apiserver, kube-controller-manager, kube-scheduler and etcd, so that they can use the new certificates.
+
+```
+
+- run command to generate the new configurations and replace the old one
+
+``` bash
+[root@k8s-master kubernetes]# kubeadm init phase kubeconfig all --config kubeadm.yaml
+[kubeconfig] Using kubeconfig folder "/etc/kubernetes"
+[kubeconfig] Using existing kubeconfig file: "/etc/kubernetes/admin.conf"
+[kubeconfig] Using existing kubeconfig file: "/etc/kubernetes/kubelet.conf"
+[kubeconfig] Using existing kubeconfig file: "/etc/kubernetes/controller-manager.conf"
+[kubeconfig] Using existing kubeconfig file: "/etc/kubernetes/scheduler.conf"
+```
+
+- restart kube-apiserver, kube-controller-manager, kube-scheduler and etcd,
+
++ show all pods with labels
+
+```
+[root@k8s-master kubernetes]# kubectl get pods --all-namespaces --show-labels
+NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE   LABELS
+default       nginx-deployment-66b6c48dd5-7bvjd          1/1     Running   0          17h   app=nginx,pod-template-hash=66b6c48dd5
+default       nginx-deployment-66b6c48dd5-bmgm9          1/1     Running   0          17h   app=nginx,pod-template-hash=66b6c48dd5
+default       nginx-deployment-66b6c48dd5-npwzb          1/1     Running   0          17h   app=nginx,pod-template-hash=66b6c48dd5
+kube-system   calico-kube-controllers-7c7b4546b9-fkw69   1/1     Running   0          52m   k8s-app=calico-kube-controllers,pod-template-hash=7c7b4546b9
+kube-system   calico-node-6bd2c                          1/1     Running   0          17h   controller-revision-hash=685c6c67b7,k8s-app=calico-node,pod-template-generation=1
+kube-system   calico-node-7g946                          1/1     Running   0          17h   controller-revision-hash=685c6c67b7,k8s-app=calico-node,pod-template-generation=1
+kube-system   calico-node-wkxw6                          1/1     Running   0          17h   controller-revision-hash=685c6c67b7,k8s-app=calico-node,pod-template-generation=1
+kube-system   coredns-599459c87f-drdwb                   1/1     Running   0          53m   k8s-app=kube-dns,pod-template-hash=599459c87f
+kube-system   coredns-599459c87f-rm8f4                   1/1     Running   0          53m   k8s-app=kube-dns,pod-template-hash=599459c87f
+kube-system   etcd-k8s-master                            1/1     Running   0          46m   component=etcd,tier=control-plane
+kube-system   etcd-k8s-node1                             1/1     Running   0          46m   component=etcd,tier=control-plane
+kube-system   etcd-k8s-node2                             1/1     Running   0          46m   component=etcd,tier=control-plane
+kube-system   kube-apiserver-k8s-master                  1/1     Running   0          47m   component=kube-apiserver,tier=control-plane
+kube-system   kube-apiserver-k8s-node1                   1/1     Running   0          47m   component=kube-apiserver,tier=control-plane
+kube-system   kube-apiserver-k8s-node2                   1/1     Running   0          47m   component=kube-apiserver,tier=control-plane
+kube-system   kube-controller-manager-k8s-master         1/1     Running   1          45m   component=kube-controller-manager,tier=control-plane
+kube-system   kube-controller-manager-k8s-node1          1/1     Running   1          45m   component=kube-controller-manager,tier=control-plane
+kube-system   kube-controller-manager-k8s-node2          1/1     Running   0          45m   component=kube-controller-manager,tier=control-plane
+kube-system   kube-proxy-76lkw                           1/1     Running   0          17h   controller-revision-hash=b89db7f56,k8s-app=kube-proxy,pod-template-generation=1
+kube-system   kube-proxy-7pzxd                           1/1     Running   0          17h   controller-revision-hash=b89db7f56,k8s-app=kube-proxy,pod-template-generation=1
+kube-system   kube-proxy-gl89x                           1/1     Running   0          17h   controller-revision-hash=b89db7f56,k8s-app=kube-proxy,pod-template-generation=1
+kube-system   kube-scheduler-k8s-master                  1/1     Running   1          45m   component=kube-scheduler,tier=control-plane
+kube-system   kube-scheduler-k8s-node1                   1/1     Running   1          45m   component=kube-scheduler,tier=control-plane
+kube-system   kube-scheduler-k8s-node2                   1/1     Running   0          45m   component=kube-scheduler,tier=control-plane
+```
+
++ delete kube-apiserver, kube-controller-manager, kube-scheduler with specified label
+
+``` bash
+kubectl -n kube-system delete pod -l 'component=kube-apiserver'
+kubectl -n kube-system delete pod -l 'component=kube-controller-manager'
+kubectl -n kube-system delete pod -l 'component=kube-scheduler'
+```
+
++ check new certs and the next experiation date
+
+``` bash
+[root@k8s-master kubernetes]# kubeadm alpha certs check-expiration
+Command "check-expiration" is deprecated, please use the same command under "kubeadm certs"
+[check-expiration] Reading configuration from the cluster...
+[check-expiration] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+
+CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
+admin.conf                 Jan 15, 2022 01:38 UTC   364d                                    no      
+apiserver                  Jan 15, 2022 01:38 UTC   364d            ca                      no      
+apiserver-etcd-client      Jan 15, 2022 01:38 UTC   364d            etcd-ca                 no      
+apiserver-kubelet-client   Jan 15, 2022 01:38 UTC   364d            ca                      no      
+controller-manager.conf    Jan 15, 2022 01:38 UTC   364d                                    no      
+etcd-healthcheck-client    Jan 15, 2022 01:38 UTC   364d            etcd-ca                 no      
+etcd-peer                  Jan 15, 2022 01:38 UTC   364d            etcd-ca                 no      
+etcd-server                Jan 15, 2022 01:38 UTC   364d            etcd-ca                 no      
+front-proxy-client         Jan 15, 2022 01:38 UTC   364d            front-proxy-ca          no      
+scheduler.conf             Jan 15, 2022 01:38 UTC   364d                                    no      
+
+CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+ca                      Jan 12, 2031 07:26 UTC   9y              no      
+etcd-ca                 Jan 12, 2031 07:26 UTC   9y              no      
+front-proxy-ca          Jan 12, 2031 07:26 UTC   9y              no      
+```
+
+```
+$echo | openssl s_client -showcerts -connect 127.0.0.1:6443 -servername api 2>/dev/null | openssl x509 -noout -enddate
+notAfter=Jan 15 01:38:48 2022 GMT
+```
+
+
 ## K8s Installation Video
 ```
 https://www.youtube.com/watch?v=ZxC6FwEc9WQ
