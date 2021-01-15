@@ -3,11 +3,11 @@ Setup K8s Multiple Master Nodes Cluster ON Centos Server
 
 #### K8s Cluster Nodes
 
-    ```bash
+    
     Master Node   10.124.44.105
     Worker Node   10.124.44.106
     Worker Node   10.124.44.107 
-    ```
+    
 
 #### Configure Host Name for all servers
 
