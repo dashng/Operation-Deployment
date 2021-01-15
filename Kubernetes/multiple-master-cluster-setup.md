@@ -1,15 +1,14 @@
 Setup K8s Multiple Master Nodes Cluster ON Centos Server
 ---------
 #### K8s Nodes
-|Node Name | IP |
-|--- | --- |
-| Master Node   | 10.124.44.105 |
-| Worker Node   | 10.124.44.106 |
-| Worker Node   | 10.124.44.107 |
+
++   Master Node   10.124.44.105
++   Worker Node   10.124.44.106
++   Worker Node   10.124.44.107 
 
 #### Configure Host Name
 
-    Edit /etc/hosts, append below lines:
+- Edit /etc/hosts, append below lines:
     ```bash
     10.124.44.105   k8s-master
     10.124.44.106   k8s-node1
