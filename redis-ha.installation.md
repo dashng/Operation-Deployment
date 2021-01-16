@@ -14,7 +14,7 @@ requirepass "123456"
 port 5000
 daemonize yes
 # sentinel deny-scripts-reconfig yes
-sentinel monitor mymaster 10.124.51.35 6379 2
+sentinel monitor mymaster <master-ip> 6379 2
 sentinel down-after-milliseconds mymaster 5000
 sentinel auth-pass mymaster 123456
 ```
@@ -24,7 +24,7 @@ sentinel auth-pass mymaster 123456
 ```
 bind 0.0.0.0
 requirepass "123456"
-replicaof 10.124.51.35 6379
+replicaof <master-ip> 6379
 masterauth "123456"
 ```
 
@@ -34,7 +34,7 @@ masterauth "123456"
 port 5000
 daemonize yes
 # sentinel deny-scripts-reconfig yes
-sentinel monitor mymaster 10.124.51.35 6379 2
+sentinel monitor mymaster <master-ip> 6379 2
 sentinel down-after-milliseconds mymaster 5000
 sentinel auth-pass mymaster 123456
 ```
