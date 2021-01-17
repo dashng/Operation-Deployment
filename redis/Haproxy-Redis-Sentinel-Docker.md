@@ -13,6 +13,8 @@ Redis Sentinel Cluster With docker, haproxy
 cat <<EOF > /usr/local/etc/redis/redis.conf
 bind 0.0.0.0
 requirepass "123456"
+replicaof 10.124.44.105 6379
+masterauth "123456"
 EOF
 ```
 
