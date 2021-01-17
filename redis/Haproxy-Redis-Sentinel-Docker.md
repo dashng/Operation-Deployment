@@ -1,5 +1,6 @@
 Redis Sentinel Cluster With docker, haproxy
 --------------
+## Design
 
 ## Cluster Nodes
 
