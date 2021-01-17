@@ -1,7 +1,7 @@
 Redis Sentinel Cluster With docker, haproxy
 --------------
 ## Design
-
+![alt text](design.png "HA Services Design")
 ## Cluster Nodes
 
 + 10.124.44.105 - master
