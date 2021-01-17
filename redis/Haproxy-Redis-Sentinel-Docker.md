@@ -9,6 +9,10 @@ Redis Sentinel Cluster With docker, haproxy
 
 ## Keepalived Deployment
 
+Running keepalived on all nodes.
+
+keepalived binding vip to the node which has haproxy service is alive.
+
 - Create configuration file
 
 ```bash
