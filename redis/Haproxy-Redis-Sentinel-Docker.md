@@ -1,7 +1,7 @@
 Redis Sentinel Cluster With docker, haproxy
 --------------
 
-#### Cluster Nodes
+## Cluster Nodes
 
 + 10.124.44.105 - master
 + 10.124.44.106 - replicator
@@ -66,6 +66,7 @@ vrrp_instance VI_1 {
 ```bash
 docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
 ```
+## Redis Cluster Setup
 
 #### Create Redis.conf On Master Node
 
