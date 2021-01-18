@@ -67,6 +67,41 @@ vrrp_instance VI_1 {
 ```bash
 docker run --cap-add=NET_ADMIN --cap-add=NET_BROADCAST --cap-add=NET_RAW --net=host --volume /etc/keepalived/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf -d osixia/keepalived:2.0.20 --copy-service
 ```
+## Haproxy Setup
+
+#### Haproxy Docker
+
+``` bash
+docker run -d --name=diamond-haproxy --net=host  -v /etc/haproxy:/usr/local/etc/haproxy/:ro haproxy
+```
+
+#### Haproxy Settings
+
+``` bash
+frontend  redis-postprocess-tcp
+    mode tcp
+    bind *:6380
+
+    default_backend             redis-postprocess-tcp
+
+backend redis-postprocess-tcp
+    mode tcp
+    option tcplog
+    option tcp-check
+    #uncomment these lines if you have basic auth
+    tcp-check send AUTH\ 123456\r\n
+    tcp-check expect string +OK
+    tcp-check send PING\r\n
+    tcp-check expect string +PONG
+    tcp-check send info\ replication\r\n
+    tcp-check expect string role:master
+    tcp-check send QUIT\r\n
+    tcp-check expect string +OK
+    server redis-105 10.124.44.105:6379 maxconn 1024 check inter 1s
+    server redis-106 10.124.44.106:6379 maxconn 1024 check inter 1s
+    server redis-107 10.124.44.107:6379 maxconn 1024 check inter 1s
+```
+
 ## Redis Cluster Setup
 
 #### Create Redis.conf On Master Node
