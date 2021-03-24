@@ -6,8 +6,6 @@ append:
 ```
 bind 0.0.0.0
 requirepass "123456"
-replicaof <master-ip> 6379
-masterauth "123456"
 ```
 
 > master redis: sentinel.conf
